@@ -1,0 +1,60 @@
+
+
+import json
+
+CONFIG_FILE = "config.json"
+
+def process_nmap_tools(config):
+    for target in config.get("targets", []):
+        ip = target.get("ip")
+        for tool in target.get("tools", []):
+            if tool.get("name") == "nmap":
+                params = tool.get("params")
+                print(f"\n Nmap for IP: {ip}")
+                print(f"   Params: {params}")
+
+def process_sqlmap_tools(config):
+    for target in config.get("targets" , []):
+         ip = target.get("ip")
+         for tool in target.get("tools" , []):
+             if tool.get("name") == "sqlmap":
+                 params = tool.get("params")
+                 print(f" \n sqlmap for IP: {ip}")
+                 print(f" params: {params}")
+
+
+
+def main():
+    try:
+        with open(CONFIG_FILE, "r") as f:
+            config = json.load(f)
+    except Exception as e:
+        print(f"[!] Error loading config: {e}")
+        return
+
+    found_nmap = False  
+
+    for target in config.get("targets", []):
+        for tool in target.get("tools", []):
+            if tool.get("name") == "nmap":
+                found_nmap = True
+                break  
+
+    if found_nmap:
+        process_nmap_tools(config)
+        
+    found_sqlmap = False
+    
+    for target in config.get("targets" , []):
+        for tool in target.get("tools" , []):
+            if tool.get("name") == "sqlmap":
+                   found_sqlmap = True
+                   break
+                   
+    if found_sqlmap:
+         process_sqlmap_tools(config)
+
+          
+
+if __name__ == "__main__":
+    main()
